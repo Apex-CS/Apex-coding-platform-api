@@ -20,16 +20,16 @@ public class CodeService {
 
 
     public CodeRunResponse runJavaCode(final CodeRunRequest request){
-        var codeString = new String(
-                Base64.getDecoder().decode(request.getCode())
-        );
+        var codeString = new String(Base64.getDecoder().decode(request.getCode()));
         log.info(codeString);
         var compiler = JavaCore.compiler(codeString, "Main", request.getSession_id());
         if(!compiler.isEmpty()){
             return new CodeRunResponse(LocalDateTime.now(), 0, CodeResults.FAILED, compiler);
         }
+        var input = new String(Base64.getDecoder().decode(request.getInput_values()));
+        log.info(input);
         var init = System.currentTimeMillis();
-        var result = JavaCore.getRunOutput("Main", request.getSession_id());
+        var result = JavaCore.getRunOutput("Main", input, request.getSession_id());
         log.info("result "+ result);
         return new CodeRunResponse(
                 LocalDateTime.now(),

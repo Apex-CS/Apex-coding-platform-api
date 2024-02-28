@@ -66,7 +66,7 @@ public class JavaCore {
         return result;
     }
 
-    public static String getRunOutput(final String className, final String path) {
+    public static String getRunOutput(final String className, final String input, final String path) {
         Path temp = Paths.get(System.getProperty("java.io.tmpdir"), path);
         String result = "";
         try {
