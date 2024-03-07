@@ -6,6 +6,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Configuration
 @EnableWebSocketMessageBroker
 
@@ -23,5 +26,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer  {
                 .setAllowedOrigins("https://afdev.ddns.net", "http://localhost:3000")
                 .withSockJS();
 
+        List<Integer> arr = List.of(1,2,4,3,-3,4,-2,-7,5,-1);
+        var res = arr.stream().filter(x -> x>0).collect(Collectors.toList());
+        var ress = arr.stream().filter(x -> x<0 && res.contains(x)).toList();
+        System.out.print(res);
     }
 }
