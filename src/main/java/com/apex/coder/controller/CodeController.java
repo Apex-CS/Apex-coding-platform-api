@@ -1,14 +1,12 @@
 package com.apex.coder.controller;
 
-import com.apex.coder.dto.CodeResults;
 import com.apex.coder.dto.request.CodeRunRequest;
+import com.apex.coder.dto.request.ProblemRequest;
 import com.apex.coder.dto.response.CodeRunResponse;
+import com.apex.coder.dto.response.ProblemResponse;
 import com.apex.coder.service.CodeService;
-import org.python.util.PythonInterpreter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @CrossOrigin
@@ -16,13 +14,23 @@ import java.time.LocalDateTime;
 public class CodeController {
     @Autowired
     private CodeService codeService;
-    @PostMapping(value = "/javaCode")
-    public @ResponseBody CodeRunResponse runJavaCases(@RequestBody final CodeRunRequest request){
+    @PostMapping(value = "/java_code")
+    public @ResponseBody CodeRunResponse runJavaCode(@RequestBody final CodeRunRequest request){
         return codeService.runJavaCode(request);
     }
 
-    @PostMapping(value = "/pythonCode")
-    public @ResponseBody CodeRunResponse runPythonCases(@RequestBody final CodeRunRequest request){
+    @PostMapping(value = "/java_test_cases")
+    public @ResponseBody CodeRunResponse runJavaTestCases(@RequestBody final CodeRunRequest request){
+        return codeService.runJavaTestCases(request);
+    }
+
+    @PostMapping(value = "/load_case")
+    public @ResponseBody ProblemResponse getProblem(@RequestBody final ProblemRequest request){
+        return codeService.getProblem(request);
+    }
+
+    @PostMapping(value = "/python_code")
+    public @ResponseBody CodeRunResponse runPythonCode(@RequestBody final CodeRunRequest request){
         return codeService.runPythonCode(request);
     }
 

@@ -2,12 +2,10 @@ package com.apex.coder.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 @Getter
 @AllArgsConstructor
-public class CodeRunRequest {
-    String code;
+public class ProblemRequest {
     long case_id;
     String session_id;
-    String input_values;
+    String user_name;
 }
