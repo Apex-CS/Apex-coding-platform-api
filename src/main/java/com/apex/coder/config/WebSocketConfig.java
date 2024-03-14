@@ -25,10 +25,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer  {
         registry.addEndpoint("/ws-endpoint")
                 .setAllowedOrigins("https://afdev.ddns.net", "http://localhost:3000")
                 .withSockJS();
-
-        List<Integer> arr = List.of(1,2,4,3,-3,4,-2,-7,5,-1);
-        var res = arr.stream().filter(x -> x>0).collect(Collectors.toList());
-        var ress = arr.stream().filter(x -> x<0 && res.contains(x)).toList();
-        System.out.print(res);
     }
 }
