@@ -1,0 +1,60 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy app on EC2 AWS instance - Coding Platform
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Push coding platform image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: '21'
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ivansanchez93/coding_platform:0.0.1-SNAPSHOT
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push the Docker Image
+        run: docker push ivansanchez93/coding_platform:0.0.1-SNAPSHOT
+
+  deploy:
+    name: Deploy coding_platform api on EC2
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Clean and Deploy
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOSTNAME: ec2-54-158-61-20.compute-1.amazonaws.com
+          USER_NAME: ec2-user
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+              docker stop coding_platform &&
+              docker rm coding_platform &&
+              docker rmi ivansanchez93/coding_platform:0.0.1-SNAPSHOT &&
+              docker-compose -f run_api_n_mysql.yml up -d
+              '
