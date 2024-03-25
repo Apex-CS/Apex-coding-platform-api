@@ -23,11 +23,6 @@ public class SocketController {
     @MessageMapping("/broadcast")
     @SendTo("/topic/reply")
     public String broadcastMessage(@Payload final String message, @Header("simpSessionId") String sessionId) throws Exception {
-        log.info(message);
-        log.info(sessionId);
         return "You have received a message: " + message;
-        /*OutputMessage out = new OutputMessage(sessionId, message);
-        messagingTemplate.convertAndSend(
-                message);*/
     }
 }
