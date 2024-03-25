@@ -53,8 +53,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-              docker stop coding_platform &&
-              docker rm coding_platform &&
+              docker stop code_platform_api &&
+              docker rm code_platform_api &&
               docker rmi ivansanchez93/coding_platform:0.0.1-SNAPSHOT &&
               docker-compose -f run_api_n_mysql.yml up -d
               '
