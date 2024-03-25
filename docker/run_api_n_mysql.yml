@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  db:
+    container_name: codePlatform_db
+    image: mysql:8.2.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'codePlatformDB'
+      MYSQL_USER: 'codePlatform'
+      MYSQL_PASSWORD: 'codePAssword$#Platform'
+      MYSQL_ROOT_PASSWORD: 'codePAssword$#Platform'
+    healthcheck:
+          test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+          timeout: 20s
+          retries: 10
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+  api:
+    container_name: code_platform_api
+    image: ivansanchez93/coding_platform:0.0.1-SNAPSHOT
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/codePlatformDB
+      - SPRING_DATASOURCE_USERNAME=codePlatform
+      - SPRING_DATASOURCE_PASSWORD=codePAssword$#Platform
+    links:
+      - db
+    volumes:
+      - /:/src
+volumes:
+  my-db:
